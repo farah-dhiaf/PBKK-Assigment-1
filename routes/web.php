@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Arr;
+use App\Models\Post;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -18,19 +22,29 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/', function () {
-    return view('home', ['title'=>'Home Page']);
+    return view('home', ['title' => 'Home Page']);
 });
 
 Route::get('/about', function () {
-    return view('about', ['title'=>'About Page', 'nama' => 'Farah']);
+    return view('about', ['title' => 'About Page', 'nama' => 'Farah']);
 });
 
-Route::get('/blog', function () {
-    return view('blog', ['title'=>'Blog Page']);
+// untuk menampilkan keseluruhan data posts
+
+Route::get('/posts', function () {
+    // akan menampilkan semua data yang ada di dalam kelas Post yang ada di dalam method all
+    return view('posts', ['title' => 'Blog', 'posts' => Post::all()]);
+});
+
+// wild card untuk mengakses data spesifik (post yang singular)
+// beban pencarian data tidak lagi di controller, melainkan di dalam model
+Route::get('/posts/{slug}', function ($slug) {
+    $post = Post::find($slug);
+    return view('post', ['title' => 'Single Post', 'post' => $post]);
 });
 
 Route::get('/contact', function () {
-    return view('contact', ['title'=>'Contact Page', 'github'=> 'farah-dhiaf']);
+    return view('contact', ['title' => 'Contact Page', 'github' => 'farah-dhiaf']);
 });
 
 
