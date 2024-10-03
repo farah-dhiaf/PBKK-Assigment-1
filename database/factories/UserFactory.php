@@ -24,10 +24,11 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'name' => fake()->name(), //fake library untuk generate data dummy
+            'username' => fake()->unique()->username(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => static::$password ??= Hash::make('password'), //null coalescing operator, jika static::$password null maka Hash::make('password') akan dijalankan
             'remember_token' => Str::random(10),
         ];
     }
@@ -41,4 +42,14 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    // pangil method di tinker pake chaining
+    // public function admin(): static
+    // {
+    //     return $this->state(fn (array $attributes) => [
+    //         'is_admin' => true,
+    //     ]);
+    // }
+
+
 }

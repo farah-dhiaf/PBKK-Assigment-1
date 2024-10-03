@@ -3,7 +3,13 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Category;
 use Illuminate\Database\Seeder;
+use PhpParser\Node\Stmt\UseUse;
+use App\Models\Post;
+use App\Models\User;
+
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,5 +24,11 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+        $this->call([CategorySeeder::class, UserSeeder::class]);
+        Post::factory(30)->recycle([
+            Category::all(),
+            User::all(),
+        ])->create();
     }
+
 }
