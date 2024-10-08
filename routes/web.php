@@ -34,8 +34,14 @@ Route::get('/about', function () {
 // untuk menampilkan keseluruhan data posts
 
 Route::get('/posts', function () {
+    // dump(request('search'));
+    // $posts = Post::latest();
+    // if (request('search')) {
+    //     $posts->where('title', 'like', '%' . request('search') . '%');
+    // }
+    // $posts = Post::with(['author', 'category'])->latest()->get(); //eager loading
     // akan menampilkan semua data yang ada di dalam kelas Post yang ada di dalam method all
-    return view('posts', ['title' => 'Blog', 'posts' => Post::all()]);
+    return view('posts', ['title' => 'Blog', 'posts' =>Post::filter(request(['search', 'category', 'author']))->latest()->paginate(6)->withQueryString()]);
 });
 
 // wild card untuk mengakses data spesifik (post yang singular)
@@ -48,14 +54,16 @@ Route::get('/posts/{post:slug}', function (Post $post) {
 
 Route::get('/authors/{user:username}', function (User $user) {
     // $post = Post::find($slug);
+    // $posts = $user->posts->load(['author', 'category']);
     
     return view('posts', ['title' => count($user->posts) . ' Articles by ' . $user->name, 'posts' => $user->posts]);
 });
 
 Route::get('/categories/{category:slug}', function (Category $category) {
     // $post = Post::find($slug);
+    // $posts = $category->posts->load(['author', 'category']);
     
-    return view('posts', ['title' => 'Articles in: ' . $category->name, 'posts' => $category->posts]);
+    return view('posts', ['title' => 'Articles in: ' . $category->name, 'posts' =>  $category->posts]);
 });
 
 Route::get('/contact', function () {
